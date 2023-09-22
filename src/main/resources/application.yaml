@@ -2,7 +2,7 @@ spring:
   application:
     name: PROFESSIONSERVICE
   profiles:
-    active: dev
+    active: prod
 
 server:
   port: 9011
