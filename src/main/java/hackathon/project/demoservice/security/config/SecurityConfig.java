@@ -24,7 +24,7 @@ public class SecurityConfig {
         http.csrf(c -> c.disable()).cors(c -> c.disable())
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/swagger-ui/**", "/professions")
-                                .permitAll().anyRequest().authenticated())
+                                .permitAll().anyRequest().permitAll())
                 .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

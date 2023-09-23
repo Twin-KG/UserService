@@ -1,6 +1,7 @@
 package hackathon.project.demoservice.model;
 
 import hackathon.project.demoservice.enumeration.ActiveStatus;
+import hackathon.project.demoservice.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -35,6 +38,10 @@ public class Professions {
     private String coverPhoto;
     private String bio;
     private String profileLink;
+    private String embeddedUrl;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Enumerated(EnumType.STRING)
     private ActiveStatus activeStatus;
