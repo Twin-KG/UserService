@@ -44,7 +44,7 @@ public class ProfessionServiceImpl implements ProfessionService {
 
     @Override
     public List<Professions> getProfessionsByUsernameLike(String username) {
-        return userRepository.getProfessionsByUsernameLikeAndRole(username, Role.ROLE_PROFESSION);
+        return userRepository.getProfessionsByUsernameLikeAndRole("%" + username + "%", Role.ROLE_PROFESSION);
     }
 
     @Override
@@ -65,6 +65,7 @@ public class ProfessionServiceImpl implements ProfessionService {
             professions.addSocialLink(linkedInLink);
             professions = userRepository.save(professions);
 
+            /** [FIX] NEED RESILIENCY4J WHEN SERVICE DOWN***/
             contentServiceClient.insertDefaultTires(professions.getId());
         } catch (DataIntegrityViolationException e){
             throw new EmailAlreadyExistException("Email already exists...");
