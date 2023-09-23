@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,10 +43,22 @@ public class ProfessionController {
 
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ZResponse<List<Professions>>> getProfessionsByUsername(
+            @RequestParam String username){
+
+        List<Professions> professions = professionService.getProfessionsByUsernameLike(username);
+
+        return ResponseEntity.ok( ZResponse.<List<Professions>>builder()
+                .success(true)
+                .message("Gotcha")
+                .data(professions)
+                .build());
+
+    }
+
     @PostMapping
     public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody ProfessionDto professionDto){
-
-
         final ModelMapper mapper = new ModelMapper();
         Professions newProfessions = mapper.map(professionDto, Professions.class);
         Optional<Category> category = categoryService.getById(professionDto.getCategoryId());

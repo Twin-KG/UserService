@@ -1,6 +1,7 @@
 package hackathon.project.demoservice.service.impl;
 
 import hackathon.project.demoservice.client.ContentServiceClient;
+import hackathon.project.demoservice.enumeration.Role;
 import hackathon.project.demoservice.exception.domain.EmailAlreadyExistException;
 import hackathon.project.demoservice.exception.domain.IncorrectPasswordException;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
@@ -39,6 +40,11 @@ public class ProfessionServiceImpl implements ProfessionService {
     @Override
     public Optional<Professions> findProfessionsByUsername(String username){
         return userRepository.findProfessionsByUsername(username);
+    }
+
+    @Override
+    public List<Professions> getProfessionsByUsernameLike(String username) {
+        return userRepository.getProfessionsByUsernameLikeAndRole(username, Role.ROLE_PROFESSION);
     }
 
     @Override
