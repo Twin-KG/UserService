@@ -25,6 +25,7 @@ public class ProfessionController {
 
     private final ProfessionService professionService;
     private final CategoryService categoryService;
+    private final ModelMapper mapper;
 
     @GetMapping
     public ResponseEntity<ZResponse<Professions>> getProfessionsByUsernameOrEmail(
@@ -59,7 +60,7 @@ public class ProfessionController {
 
     @PostMapping
     public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody ProfessionDto professionDto){
-        final ModelMapper mapper = new ModelMapper();
+
         Professions newProfessions = mapper.map(professionDto, Professions.class);
         Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
         Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));

@@ -9,13 +9,12 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 ## Eureka Configuration ##
 eureka:
   instance:
     prefer-ip-address: true
-    hostname: 10.10.1.80
   client:
     registerWithEureka: true
     fetchRegistry: true
