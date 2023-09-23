@@ -6,6 +6,7 @@ import hackathon.project.demoservice.exception.domain.IncorrectPasswordException
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
 import hackathon.project.demoservice.exception.domain.UsernameAlreadyExistException;
 import hackathon.project.demoservice.model.Professions;
+import hackathon.project.demoservice.model.SocialLink;
 import hackathon.project.demoservice.repo.ProfessionRepository;
 import hackathon.project.demoservice.service.ProfessionService;
 import io.micrometer.common.util.StringUtils;
@@ -16,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static hackathon.project.demoservice.constant.UserConstant.*;
@@ -46,14 +48,22 @@ public class ProfessionServiceImpl implements ProfessionService {
 
     @Override
     public Professions saveUser(Professions professions){
-        Professions profession = null;
         try{
-            profession = userRepository.save(professions);
-            contentServiceClient.insertDefaultTires(profession.getId());
+
+            SocialLink facebookLink = SocialLink.builder().name("facebook").build();
+            SocialLink mailLink = SocialLink.builder().name("mail").build();
+            SocialLink linkedInLink = SocialLink.builder().name("linkedIn").build();
+
+            professions.addSocialLink(facebookLink);
+            professions.addSocialLink(mailLink);
+            professions.addSocialLink(linkedInLink);
+            professions = userRepository.save(professions);
+
+            contentServiceClient.insertDefaultTires(professions.getId());
         } catch (DataIntegrityViolationException e){
             throw new EmailAlreadyExistException("Email already exists...");
         }
-        return profession;
+        return professions;
     }
 
     @Override

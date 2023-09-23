@@ -1,6 +1,5 @@
 package hackathon.project.demoservice.controller;
 
-import hackathon.project.demoservice.client.ContentServiceClient;
 import hackathon.project.demoservice.domain.ZResponse;
 import hackathon.project.demoservice.dto.PasswordResetDto;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;

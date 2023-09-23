@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table
 @Builder
@@ -35,5 +38,17 @@ public class Professions {
 
     @Enumerated(EnumType.STRING)
     private ActiveStatus activeStatus;
+
+    @OneToMany(mappedBy = "profession", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SocialLink> socialLinkList;
+
+    public void addSocialLink(SocialLink socialLink){
+        if(socialLinkList == null){
+            socialLinkList = new ArrayList<>();
+        }
+
+        socialLink.setProfession(this);
+        socialLinkList.add(socialLink);
+    }
 
 }
