@@ -58,6 +58,22 @@ public class ProfessionController {
 
     }
 
+    @GetMapping("/mail")
+    public ResponseEntity<ZResponse<Professions>> getProfessionsByMail(
+            @RequestParam String email){
+
+        Optional<Professions> professionsOptional = professionService.findProfessionsByMail(email);
+
+        Professions professions = professionsOptional.orElseThrow(() -> new UserNotFoundException("User is not found"));
+
+        return ResponseEntity.ok( ZResponse.<Professions>builder()
+                .success(true)
+                .message("Gotcha")
+                .data(professions)
+                .build());
+
+    }
+
     @PostMapping
     public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody ProfessionDto professionDto){
 

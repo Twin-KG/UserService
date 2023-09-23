@@ -38,6 +38,11 @@ public class ProfessionServiceImpl implements ProfessionService {
     }
 
     @Override
+    public Optional<Professions> findProfessionsByMail(String mail) {
+        return userRepository.findProfessionsByEmail(mail);
+    }
+
+    @Override
     public Optional<Professions> findProfessionsByUsername(String username){
         return userRepository.findProfessionsByUsername(username);
     }

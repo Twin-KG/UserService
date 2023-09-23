@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface ProfessionService {
     Optional<Professions> findProfessionsById(Long id);
     Optional<Professions> findProfessionsByUsername(String username);
+    Optional<Professions> findProfessionsByMail(String mail);
     List<Professions> getProfessionsByUsernameLike(String username);
     Optional<Professions> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email);
     Professions saveUser(Professions professions);
