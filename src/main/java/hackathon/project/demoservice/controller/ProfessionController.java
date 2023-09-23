@@ -2,12 +2,19 @@ package hackathon.project.demoservice.controller;
 
 import hackathon.project.demoservice.domain.ZResponse;
 import hackathon.project.demoservice.dto.PasswordResetDto;
+import hackathon.project.demoservice.dto.ProfessionDto;
+import hackathon.project.demoservice.exception.domain.DataNotFoundException;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
+import hackathon.project.demoservice.model.Category;
 import hackathon.project.demoservice.model.Professions;
+import hackathon.project.demoservice.service.CategoryService;
 import hackathon.project.demoservice.service.ProfessionService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/professions")
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfessionController {
 
     private final ProfessionService professionService;
+    private final CategoryService categoryService;
 
     @GetMapping
     public ResponseEntity<ZResponse<Professions>> getProfessionsByUsernameOrEmail(
@@ -35,12 +43,20 @@ public class ProfessionController {
     }
 
     @PostMapping
-    public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody Professions newProfessions){
-        Professions professions = professionService.saveUser(newProfessions);
+    public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody ProfessionDto professionDto){
+
+
+        final ModelMapper mapper = new ModelMapper();
+        Professions newProfessions = mapper.map(professionDto, Professions.class);
+        Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
+        Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
+        newProfessions.setCategory(data);
+
+        newProfessions = professionService.saveUser(newProfessions);
         return ResponseEntity.ok( ZResponse.<Professions>builder()
                 .success(true)
                 .message("Successfully saved user")
-                .data(professions)
+                .data(newProfessions)
                 .build());
     }
 

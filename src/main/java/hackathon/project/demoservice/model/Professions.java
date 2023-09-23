@@ -46,6 +46,14 @@ public class Professions {
     @Enumerated(EnumType.STRING)
     private ActiveStatus activeStatus;
 
+    @ManyToOne
+    @JoinTable(
+            name = "profession_category", // Name of the link table
+            joinColumns = @JoinColumn(name = "profession_id"), // Foreign key column in the link table
+            inverseJoinColumns = @JoinColumn(name = "category_id") // Foreign key column in the link table
+    )
+    private Category category;
+
     @OneToMany(mappedBy = "profession", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SocialLink> socialLinkList;
 
