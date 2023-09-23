@@ -1,5 +1,6 @@
 package hackathon.project.demoservice.service.impl;
 
+import hackathon.project.demoservice.client.ContentServiceClient;
 import hackathon.project.demoservice.exception.domain.EmailAlreadyExistException;
 import hackathon.project.demoservice.exception.domain.IncorrectPasswordException;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
@@ -8,6 +9,7 @@ import hackathon.project.demoservice.model.Professions;
 import hackathon.project.demoservice.repo.ProfessionRepository;
 import hackathon.project.demoservice.service.ProfessionService;
 import io.micrometer.common.util.StringUtils;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,11 +21,13 @@ import java.util.Optional;
 import static hackathon.project.demoservice.constant.UserConstant.*;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class ProfessionServiceImpl implements ProfessionService {
 
     private final ProfessionRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ContentServiceClient contentServiceClient;
 
     @Override
     public Optional<Professions> findProfessionsById(Long id) {
@@ -45,6 +49,7 @@ public class ProfessionServiceImpl implements ProfessionService {
         Professions profession = null;
         try{
             profession = userRepository.save(professions);
+            contentServiceClient.insertDefaultTires(profession.getId());
         } catch (DataIntegrityViolationException e){
             throw new EmailAlreadyExistException("Email already exists...");
         }

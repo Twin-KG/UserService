@@ -1,5 +1,6 @@
 package hackathon.project.demoservice.controller;
 
+import hackathon.project.demoservice.client.ContentServiceClient;
 import hackathon.project.demoservice.domain.ZResponse;
 import hackathon.project.demoservice.dto.PasswordResetDto;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
@@ -35,10 +36,7 @@ public class ProfessionController {
 
     @PostMapping
     public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody Professions newProfessions){
-
-        System.out.println("START");
         Professions professions = professionService.saveUser(newProfessions);
-        System.out.println("END");
         return ResponseEntity.ok( ZResponse.<Professions>builder()
                 .success(true)
                 .message("Successfully saved user")
