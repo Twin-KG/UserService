@@ -18,4 +18,5 @@ public class ProfessionServiceApplication {
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
+
 }
