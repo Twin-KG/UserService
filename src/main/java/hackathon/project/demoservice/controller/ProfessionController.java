@@ -35,9 +35,10 @@ public class ProfessionController {
     public ResponseEntity<ZResponse<ProfessionDto>> getProfessionsByUsernameOrEmail(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String email){
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Long category_id){
 
-        ProfessionDto professions = professionService.findProfessionsByIdOrUsernameOrEmail(id, username, email)
+        ProfessionDto professions = professionService.findProfessionsByIdOrUsernameOrEmailOrCategoryId(id, username, email, category_id)
                 .orElseThrow(() -> new UserNotFoundException("Profession is not found..."));
 
         return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()

@@ -11,7 +11,7 @@ public interface ProfessionRepository extends JpaRepository<Professions, String>
     Optional<Professions> findProfessionsById(Long id);
     Optional<Professions> findProfessionsByUsername(String username);
     Optional<Professions> findProfessionsByEmail(String email);
-    Optional<Professions> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email);
+    Optional<Professions> findProfessionsByIdOrUsernameOrEmailOrCategoryId(Long id, String username, String email, Long categoryId);
     Optional<Professions> findProfessionsByUsernameOrEmail(String username, String email);
     List<Professions> getProfessionsByUsernameLikeAndRole(String username, Role role);
 }
