@@ -35,6 +35,7 @@ public class ProfessionServiceImpl implements ProfessionService {
     private final ProfessionRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ContentServiceClient contentServiceClient;
+    private final ModelMapper modelMapper;
 
     @Override
     public Optional<Professions> findProfessionsById(Long id) {
@@ -57,8 +58,17 @@ public class ProfessionServiceImpl implements ProfessionService {
     }
 
     @Override
-    public Optional<Professions> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email) {
-        return userRepository.findProfessionsByIdOrUsernameOrEmail(id, username, email);
+    public Optional<ProfessionDto> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email) {
+        ProfessionDto professions = null;
+        Optional<Professions> professionsOptional = userRepository.findProfessionsByIdOrUsernameOrEmail(id, username, email);
+        if(professionsOptional.isPresent()){
+            Professions data = professionsOptional.get();
+            professions = modelMapper.map(data, ProfessionDto.class);
+
+            ZResponse<List<Tier>> tierResponse = contentServiceClient.findTiersByProfessionId(id);
+            professions.setTierList(tierResponse.getData());
+        }
+        return Optional.ofNullable(professions);
     }
 
     @Override

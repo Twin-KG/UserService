@@ -31,15 +31,15 @@ public class ProfessionController {
     private final ModelMapper mapper;
 
     @GetMapping
-    public ResponseEntity<ZResponse<Professions>> getProfessionsByUsernameOrEmail(
+    public ResponseEntity<ZResponse<ProfessionDto>> getProfessionsByUsernameOrEmail(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email){
 
-        Professions professions = professionService.findProfessionsByIdOrUsernameOrEmail(id, username, email)
+        ProfessionDto professions = professionService.findProfessionsByIdOrUsernameOrEmail(id, username, email)
                 .orElseThrow(() -> new UserNotFoundException("Profession is not found..."));
 
-        return ResponseEntity.ok( ZResponse.<Professions>builder()
+        return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                   .success(true)
                   .message("Gotcha")
                   .data(professions)

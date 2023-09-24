@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import static hackathon.project.demoservice.constant.UserConstant.*;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class ExceptionHandling {
@@ -29,12 +28,12 @@ public class ExceptionHandling {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ZResponse> userNotFoundException() {
-        return createHttpResponse(BAD_REQUEST, USER_NOT_FOUND_BY_USERNAME);
+        return createHttpResponse(NO_CONTENT, USER_NOT_FOUND_BY_USERNAME);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ZResponse> usernameNotFoundException() {
-        return createHttpResponse(BAD_REQUEST, USER_NOT_FOUND_BY_USERNAME);
+        return createHttpResponse(NO_CONTENT, USER_NOT_FOUND_BY_USERNAME);
     }
 
     @ExceptionHandler(InvalidRoleException.class)
@@ -54,7 +53,7 @@ public class ExceptionHandling {
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ZResponse> dataNotFoundException(Exception e) {
-        return createHttpResponse(BAD_REQUEST, e.getMessage());
+        return createHttpResponse(NO_CONTENT, e.getMessage());
     }
 
     @ExceptionHandler(IncorrectPasswordException.class)
