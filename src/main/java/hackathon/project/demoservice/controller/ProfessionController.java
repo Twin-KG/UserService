@@ -90,6 +90,28 @@ public class ProfessionController {
     @PostMapping
     public ResponseEntity<ZResponse<ProfessionDto>> saveUser(@RequestBody ProfessionDto professionDto){
 
+        ProfessionDto result= saveOrUpdateProfession(professionDto);
+
+        return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
+                .success(true)
+                .message("Successfully saved user")
+                .data(result)
+                .build());
+    }
+
+    @PutMapping
+    public ResponseEntity<ZResponse<ProfessionDto>> updateUser(@RequestBody ProfessionDto professionDto){
+
+        ProfessionDto result= saveOrUpdateProfession(professionDto);
+
+        return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
+                .success(true)
+                .message("Successfully updated user")
+                .data(result)
+                .build());
+    }
+
+    public ProfessionDto saveOrUpdateProfession(ProfessionDto professionDto){
         ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
@@ -101,12 +123,7 @@ public class ProfessionController {
         }
 
         newProfessions.setId(null);
-        result = professionService.saveUser(newProfessions);
-        return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
-                .success(true)
-                .message("Successfully saved user")
-                .data(result)
-                .build());
+        return professionService.saveUser(newProfessions);
     }
 
     @PostMapping("/reset-password")
