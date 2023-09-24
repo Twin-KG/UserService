@@ -108,9 +108,12 @@ public class ProfessionController {
         ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
-        Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
-        Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
-        newProfessions.setCategory(data);
+
+        if(professionDto.getCategoryId() != null){
+            Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
+            Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
+            newProfessions.setCategory(data);
+        }
 
         newProfessions.setId(null);
         result = professionService.saveUser(newProfessions);
@@ -127,10 +130,13 @@ public class ProfessionController {
         ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
-        Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
-        Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
-        newProfessions.setCategory(data);
 
+        if(professionDto.getCategoryId() != null){
+            Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
+            Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
+            newProfessions.setCategory(data);
+
+        }
         result = professionService.saveUser(newProfessions);
         return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                 .success(true)
