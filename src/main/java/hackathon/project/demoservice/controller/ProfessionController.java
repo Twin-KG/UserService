@@ -47,7 +47,7 @@ public class ProfessionController {
 
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<ZResponse<List<Professions>>> getProfessionsByUsernameOrEmail(
             @RequestParam(required = false) String username,
             @RequestParam(required = false) Long category_id){
