@@ -5,6 +5,7 @@ import hackathon.project.demoservice.domain.Tier;
 import hackathon.project.demoservice.domain.ZResponse;
 import hackathon.project.demoservice.dto.PasswordResetDto;
 import hackathon.project.demoservice.dto.ProfessionDto;
+import hackathon.project.demoservice.enumeration.Role;
 import hackathon.project.demoservice.exception.domain.DataNotFoundException;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
 import hackathon.project.demoservice.model.Category;
@@ -92,9 +93,12 @@ public class ProfessionController {
         ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
-        Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
-        Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
-        newProfessions.setCategory(data);
+
+        if(professionDto.getCategoryId() != null){
+            Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
+            Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
+            newProfessions.setCategory(data);
+        }
 
         newProfessions.setId(null);
         result = professionService.saveUser(newProfessions);
