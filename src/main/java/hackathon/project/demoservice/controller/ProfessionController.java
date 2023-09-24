@@ -105,22 +105,18 @@ public class ProfessionController {
     @PostMapping
     public ResponseEntity<ZResponse<ProfessionDto>> saveUser(@RequestBody ProfessionDto professionDto){
 
-
         ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
+        Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
+        Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
+        newProfessions.setCategory(data);
 
-        if(professionDto.getCategoryId() != null){
-            Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
-            Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
-            newProfessions.setCategory(data);
-        }
-
-        result.setId(null);
+        newProfessions.setId(null);
         result = professionService.saveUser(newProfessions);
         return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                 .success(true)
-                .message("Successfully updated user")
+                .message("Successfully saved user")
                 .data(result)
                 .build());
     }
@@ -131,17 +127,14 @@ public class ProfessionController {
         ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
-
-        if(professionDto.getCategoryId() != null){
-            Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
-            Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
-            newProfessions.setCategory(data);
-        }
+        Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
+        Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
+        newProfessions.setCategory(data);
 
         result = professionService.saveUser(newProfessions);
         return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                 .success(true)
-                .message("Successfully updated user")
+                .message("Successfully saved user")
                 .data(result)
                 .build());
     }
