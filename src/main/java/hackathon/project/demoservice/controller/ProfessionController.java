@@ -1,5 +1,7 @@
 package hackathon.project.demoservice.controller;
 
+import hackathon.project.demoservice.client.ContentServiceClient;
+import hackathon.project.demoservice.domain.Tier;
 import hackathon.project.demoservice.domain.ZResponse;
 import hackathon.project.demoservice.dto.PasswordResetDto;
 import hackathon.project.demoservice.dto.ProfessionDto;
@@ -25,6 +27,7 @@ public class ProfessionController {
 
     private final ProfessionService professionService;
     private final CategoryService categoryService;
+    private final ContentServiceClient contentServiceClient;
     private final ModelMapper mapper;
 
     @GetMapping
@@ -59,34 +62,45 @@ public class ProfessionController {
     }
 
     @GetMapping("/mail")
-    public ResponseEntity<ZResponse<Professions>> getProfessionsByMail(
+    public ResponseEntity<ZResponse<ProfessionDto>> getProfessionsByMail(
             @RequestParam String email){
 
+        ModelMapper mapper = new ModelMapper();
+
+        ProfessionDto response = null;
+
         Optional<Professions> professionsOptional = professionService.findProfessionsByMail(email);
-
         Professions professions = professionsOptional.orElseThrow(() -> new UserNotFoundException("User is not found"));
+        response = mapper.map(professions, ProfessionDto.class);
 
-        return ResponseEntity.ok( ZResponse.<Professions>builder()
+        ZResponse<List<Tier>> tierListResponse = contentServiceClient.findTiersByProfessionId(professions.getId());
+        if(tierListResponse != null){
+            response.setTierList(tierListResponse.getData());
+        }
+
+        return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                 .success(true)
                 .message("Gotcha")
-                .data(professions)
+                .data(response)
                 .build());
 
     }
 
     @PostMapping
-    public ResponseEntity<ZResponse<Professions>> saveUser(@RequestBody ProfessionDto professionDto){
+    public ResponseEntity<ZResponse<ProfessionDto>> saveUser(@RequestBody ProfessionDto professionDto){
+
+        ProfessionDto result = null;
 
         Professions newProfessions = mapper.map(professionDto, Professions.class);
         Optional<Category> category = categoryService.getById(professionDto.getCategoryId());
         Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
         newProfessions.setCategory(data);
 
-        newProfessions = professionService.saveUser(newProfessions);
-        return ResponseEntity.ok( ZResponse.<Professions>builder()
+        result = professionService.saveUser(newProfessions);
+        return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                 .success(true)
                 .message("Successfully saved user")
-                .data(newProfessions)
+                .data(result)
                 .build());
     }
 

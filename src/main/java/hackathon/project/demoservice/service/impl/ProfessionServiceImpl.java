@@ -1,6 +1,9 @@
 package hackathon.project.demoservice.service.impl;
 
 import hackathon.project.demoservice.client.ContentServiceClient;
+import hackathon.project.demoservice.domain.Tier;
+import hackathon.project.demoservice.domain.ZResponse;
+import hackathon.project.demoservice.dto.ProfessionDto;
 import hackathon.project.demoservice.enumeration.Role;
 import hackathon.project.demoservice.exception.domain.EmailAlreadyExistException;
 import hackathon.project.demoservice.exception.domain.IncorrectPasswordException;
@@ -14,6 +17,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang.RandomStringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,7 +62,10 @@ public class ProfessionServiceImpl implements ProfessionService {
     }
 
     @Override
-    public Professions saveUser(Professions professions){
+    public ProfessionDto saveUser(Professions professions){
+
+        ProfessionDto result = null;
+
         try{
 
             SocialLink facebookLink = SocialLink.builder().name("facebook").build();
@@ -70,12 +77,16 @@ public class ProfessionServiceImpl implements ProfessionService {
             professions.addSocialLink(linkedInLink);
             professions = userRepository.save(professions);
 
+            ModelMapper modelMapper = new ModelMapper();
+            result = modelMapper.map(professions, ProfessionDto.class);
+
             /** [FIX] NEED RESILIENCY4J WHEN SERVICE DOWN***/
-            contentServiceClient.insertDefaultTires(professions.getId());
+            ZResponse<List<Tier>> tierResponse = contentServiceClient.insertDefaultTires(professions.getId());
+            result.setTierList(tierResponse.getData());
         } catch (DataIntegrityViolationException e){
             throw new EmailAlreadyExistException("Email already exists...");
         }
-        return professions;
+        return result;
     }
 
     @Override

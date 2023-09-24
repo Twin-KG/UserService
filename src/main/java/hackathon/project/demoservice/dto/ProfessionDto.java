@@ -1,8 +1,13 @@
 package hackathon.project.demoservice.dto;
 
+import hackathon.project.demoservice.domain.AccessType;
+import hackathon.project.demoservice.domain.Tier;
 import hackathon.project.demoservice.enumeration.ActiveStatus;
 import hackathon.project.demoservice.enumeration.Role;
+import hackathon.project.demoservice.model.Category;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +31,7 @@ public class ProfessionDto {
     private Role role;
 
     private ActiveStatus activeStatus;
+    private List<Tier> tierList;
     private Long categoryId;
+    private Category category;
 }

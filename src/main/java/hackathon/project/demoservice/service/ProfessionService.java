@@ -1,5 +1,6 @@
 package hackathon.project.demoservice.service;
 
+import hackathon.project.demoservice.dto.ProfessionDto;
 import hackathon.project.demoservice.model.Professions;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ProfessionService {
     Optional<Professions> findProfessionsByMail(String mail);
     List<Professions> getProfessionsByUsernameLike(String username);
     Optional<Professions> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email);
-    Professions saveUser(Professions professions);
+    ProfessionDto saveUser(Professions professions);
     Professions validateNewUserAndEmail(String currentUsername, String newUsername, String newEmail);
     Professions resetPasswordByEmail(String email, String oldPassword, String newPassword);
 }

@@ -16,5 +16,9 @@ public interface ContentServiceClient {
     ZResponse<List<Tier>> insertDefaultTires(
             @RequestParam(name = "professionId", required = false) Long professionId);
 
+    @RequestMapping(method = RequestMethod.GET, value = "api/v1/tiers",consumes = "application/json")
+    ZResponse<List<Tier>> findTiersByProfessionId(
+            @RequestParam(name = "professionId", required = false) Long professionId);
+
 
 }
