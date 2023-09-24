@@ -11,7 +11,8 @@ public interface ProfessionService {
     Optional<Professions> findProfessionsByUsername(String username);
     Optional<Professions> findProfessionsByMail(String mail);
     List<Professions> getProfessionsByUsernameLike(String username);
-    Optional<ProfessionDto> findProfessionsByIdOrUsernameOrEmailOrCategoryId(Long id, String username, String email, Long categoryId);
+    List<Professions> getProfessionsByUsernameLikeOrCategoryId(String username, Long categoryId);
+    Optional<ProfessionDto> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email);
     ProfessionDto saveUser(Professions professions);
     Professions validateNewUserAndEmail(String currentUsername, String newUsername, String newEmail);
     Professions resetPasswordByEmail(String email, String oldPassword, String newPassword);

@@ -58,9 +58,14 @@ public class ProfessionServiceImpl implements ProfessionService {
     }
 
     @Override
-    public Optional<ProfessionDto> findProfessionsByIdOrUsernameOrEmailOrCategoryId(Long id, String username, String email, Long categoryId) {
+    public List<Professions> getProfessionsByUsernameLikeOrCategoryId(String username, Long categoryId) {
+        return userRepository.getProfessionsByUsernameLikeOrCategoryId("%" + username + "%", categoryId);
+    }
+
+    @Override
+    public Optional<ProfessionDto> findProfessionsByIdOrUsernameOrEmail(Long id, String username, String email) {
         ProfessionDto professions = null;
-        Optional<Professions> professionsOptional = userRepository.findProfessionsByIdOrUsernameOrEmailOrCategoryId(id, username, email, categoryId);
+        Optional<Professions> professionsOptional = userRepository.findProfessionsByIdOrUsernameOrEmail(id, username, email);
         if(professionsOptional.isPresent()){
             Professions data = professionsOptional.get();
             professions = modelMapper.map(data, ProfessionDto.class);

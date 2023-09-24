@@ -5,7 +5,6 @@ import hackathon.project.demoservice.domain.Tier;
 import hackathon.project.demoservice.domain.ZResponse;
 import hackathon.project.demoservice.dto.PasswordResetDto;
 import hackathon.project.demoservice.dto.ProfessionDto;
-import hackathon.project.demoservice.enumeration.Role;
 import hackathon.project.demoservice.exception.domain.DataNotFoundException;
 import hackathon.project.demoservice.exception.domain.UserNotFoundException;
 import hackathon.project.demoservice.model.Category;
@@ -35,10 +34,9 @@ public class ProfessionController {
     public ResponseEntity<ZResponse<ProfessionDto>> getProfessionsByUsernameOrEmail(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) Long category_id){
+            @RequestParam(required = false) String email){
 
-        ProfessionDto professions = professionService.findProfessionsByIdOrUsernameOrEmailOrCategoryId(id, username, email, category_id)
+        ProfessionDto professions = professionService.findProfessionsByIdOrUsernameOrEmail(id, username, email)
                 .orElseThrow(() -> new UserNotFoundException("Profession is not found..."));
 
         return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
@@ -46,6 +44,22 @@ public class ProfessionController {
                   .message("Gotcha")
                   .data(professions)
                   .build());
+
+    }
+
+    @GetMapping
+    public ResponseEntity<ZResponse<List<Professions>>> getProfessionsByUsernameOrEmail(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) Long category_id){
+
+        List<Professions> professions =
+                professionService.getProfessionsByUsernameLikeOrCategoryId(username, category_id);
+
+        return ResponseEntity.ok( ZResponse.<List<Professions>>builder()
+                .success(true)
+                .message("Gotcha")
+                .data(professions)
+                .build());
 
     }
 
