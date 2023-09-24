@@ -96,6 +96,7 @@ public class ProfessionController {
         Category data = category.orElseThrow(() -> new DataNotFoundException("Category is not found"));
         newProfessions.setCategory(data);
 
+        newProfessions.setId(null);
         result = professionService.saveUser(newProfessions);
         return ResponseEntity.ok( ZResponse.<ProfessionDto>builder()
                 .success(true)
