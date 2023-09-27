@@ -29,7 +29,6 @@ public class ProfessionDto {
     private String bio;
     private String profileLink;
     private Role role;
-    private String embedUrl;
 
     private ActiveStatus activeStatus;
     private List<Tier> tierList;
