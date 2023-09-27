@@ -69,6 +69,7 @@ public class ProfessionServiceImpl implements ProfessionService {
         if(professionsOptional.isPresent()){
             Professions data = professionsOptional.get();
             professions = modelMapper.map(data, ProfessionDto.class);
+            professions.setEmbedUrl(data.getEmbeddedUrl());
 
             ZResponse<List<Tier>> tierResponse = contentServiceClient.findTiersByProfessionId(id);
             professions.setTierList(tierResponse.getData());
